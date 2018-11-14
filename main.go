@@ -1,8 +1,15 @@
 package main
 
-import "Cloud2Podcast/rss"
+import (
+	"Cloud2Podcast/podcastMaker"
+	"log"
+	"net/http"
+)
 
 func main() {
-	rss := rss.NewRssfeedBuilder()
-	rss.PrintTemplate()
+	router := http.NewServeMux()
+	router.Handle("/downloads/", http.StripPrefix("/downloads/", http.FileServer(http.Dir("downloads"))))
+	router.Handle("/podcasts", podcastMaker.Handle())
+	log.Fatal(http.ListenAndServe(":8080", router))
+
 }

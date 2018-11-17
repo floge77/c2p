@@ -1,15 +1,15 @@
 package main
 
 import (
-	"Cloud2Podcast/podcastMaker"
+	"cloud2podcast/podcastMaker"
 	"log"
 	"net/http"
 )
 
 func main() {
 	router := http.NewServeMux()
-	router.Handle("/downloads/", http.StripPrefix("/downloads/", http.FileServer(http.Dir("downloads"))))
-	router.Handle("/podcasts", podcastMaker.Handle())
+	c2p := podcastMaker.Cloud2podcast{}
+	router.Handle("/downloads/", http.StripPrefix("/downloads/", http.FileServer(http.Dir("/downloads"))))
+	router.HandleFunc("/podcasts", c2p.MakeAllPodcasts)
 	log.Fatal(http.ListenAndServe(":8080", router))
-
 }

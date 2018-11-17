@@ -1,42 +1,65 @@
 package podcastMaker
 
 import (
-	"Cloud2Podcast/musiccloud"
+	"cloud2podcast/configReader"
+	"cloud2podcast/musiccloud"
+	"log"
 	"net/http"
 )
 
-type Cloud2Podcast struct {
+type Cloud2podcast struct {
+	podcastMaker      *PodcastMaker
+	fileInfoExtractor *FileInfoExtractor
 }
 
-//func NewCloud2Podcast() *Cloud2Podcast {
-//	return &Cloud2Podcast{}
+//func Handle() http.Handler {
+//	return http.HandlerFunc(MakeAllPodcasts)
 //}
 
-func Handle() http.Handler {
-	return http.HandlerFunc(MakePodcasts)
+func GetConfig(yamlPath string) configReader.PodcastConfig {
+	yamlReader := configReader.NewYamlreader()
+	config := configReader.PodcastConfig{}
+	config = yamlReader.ReadYamlfile(yamlPath, config)
+	return config
 }
 
-func MakePodcasts(w http.ResponseWriter, r *http.Request) {
+func (c *Cloud2podcast) MakeAllPodcasts(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 
-	youtube := musiccloud.NewYoutube()
-	podcastMaker := NewPodcastMaker()
-	fileInfoExtractor := NewFileInfoExtractor()
+	c.podcastMaker = NewPodcastMaker()
+	c.fileInfoExtractor = NewFileInfoExtractor()
 
-	youtube.Channel = "Q-Dance"
-	youtube.ChannelURL = "https://www.youtube.com/qdancedotnl"
-	youtube.ChannelImageURL = "https://yt3.ggpht.com/a-/AN66SAzyW12uAQRayPY4MS_Fo_Wlj6PFjyNfx3X7CQ=s288-mo-c-c0xffffffff-rj-k-no"
-	youtube.PlaylistToDownloadURL = "https://www.youtube.com/watch\\?v\\=ZMPlY-FtJIM\\&list\\=UUAEwCfBRlB3jIY9whEfSP5Q"
-	youtube.Items = fileInfoExtractor.GetPodcastItemsInformationForDir("downloads")
+	config := GetConfig("config/config.yaml")
 
-	youtubePodcast := podcastMaker.GetInitializedPodcast(youtube)
-	for _, item := range youtube.Items {
-		podcastMaker.AppendPodcastItem(youtubePodcast, item, "http://192.168.178.30:8080/downloads/")
+	for _, podcast := range config.PodcastsToServe {
+		podcastInfo := musiccloud.NewPodcastinfo(
+			podcast.Channel,
+			podcast.ChannelURL,
+			podcast.ChannelImageURL,
+			podcast.PlaylistToDownloadURL)
+		go c.servePodcast(w, r, podcastInfo, config.DownloadDirectory)
+	}
+}
+
+func (c *Cloud2podcast) servePodcast(w http.ResponseWriter, r *http.Request, podcastInfo *musiccloud.Podcastinfo, generalDownloadDirectory string) {
+	completeDownloadDirectory := generalDownloadDirectory + "/" + podcastInfo.Provider + "/" + podcastInfo.Channel
+	var err error
+
+	podcastInfo.Items, err = c.fileInfoExtractor.GetPodcastItemsInformationForDir(completeDownloadDirectory)
+	if err != nil {
+		log.Printf("Could not serve Podcast: %v Error: %v", podcastInfo.Channel, err)
+	} else {
+		podcast := c.podcastMaker.GetInitializedPodcast(podcastInfo)
+
+		for _, item := range podcastInfo.Items {
+			c.podcastMaker.AppendPodcastItem(podcast, item, "http://192.168.178.30:8080/"+completeDownloadDirectory+"/")
+		}
+
+		w.Header().Set("Content-Type", "application/xml")
+
+		if err := podcast.Encode(w); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
 	}
 
-	w.Header().Set("Content-Type", "application/xml")
-
-	if err := youtubePodcast.Encode(w); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
 }

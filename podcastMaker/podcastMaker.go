@@ -1,7 +1,7 @@
 package podcastMaker
 
 import (
-	"Cloud2Podcast/musiccloud"
+	"cloud2podcast/musiccloud"
 	"fmt"
 
 	"github.com/eduncan911/podcast"
@@ -14,16 +14,16 @@ func NewPodcastMaker() *PodcastMaker {
 	return &PodcastMaker{}
 }
 
-func (*PodcastMaker) GetInitializedPodcast(cloudMusicProvider musiccloud.CloudMusicProvider) *podcast.Podcast {
+func (*PodcastMaker) GetInitializedPodcast(podcastinfo *musiccloud.Podcastinfo) *podcast.Podcast {
 
-	channel := cloudMusicProvider.GetChannel()
-	provider := cloudMusicProvider.GetProvider()
-	imageURL := cloudMusicProvider.GetChannelImageURL()
+	channel := podcastinfo.Channel
+	provider := podcastinfo.Provider
+	imageURL := podcastinfo.ChannelImageURL
 	title := channel + "-" + provider + "-Podcast"
 
 	p := podcast.New(
 		title,
-		cloudMusicProvider.GetChannelURL(),
+		podcastinfo.ChannelURL,
 		"",
 		nil, nil,
 	)

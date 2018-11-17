@@ -1,9 +1,0 @@
-mixcloud:
-  numberOfTracks: 10
-  artists:
-    - q-dance
-    - keepingtheravealive
-soundcloud:
-  numberOfTracks: 5
-  artists:
-    - clnpodcast

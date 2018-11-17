@@ -1,8 +1,7 @@
 package podcastMaker
 
 import (
-	"Cloud2Podcast/musiccloud"
-	"log"
+	"cloud2podcast/musiccloud"
 	"os"
 	"strings"
 	"time"
@@ -15,9 +14,12 @@ func NewFileInfoExtractor() *FileInfoExtractor {
 	return &FileInfoExtractor{}
 }
 
-func (f *FileInfoExtractor) GetPodcastItemsInformationForDir(dir string) (itemInfos []*musiccloud.PodcastItem) {
+func (f *FileInfoExtractor) GetPodcastItemsInformationForDir(dir string) (itemInfos []*musiccloud.PodcastItem, err error) {
 
-	fileNames := f.readdir(dir)
+	fileNames, err := f.readdir(dir)
+	if err != nil {
+		return nil, err
+	}
 	for _, name := range fileNames {
 		// create Info structs for podcastsItems
 		item := f.getPodcastItemInfosFromFileName(dir, name)
@@ -53,12 +55,12 @@ func (*FileInfoExtractor) getReleaseDateFromString(date string) *time.Time {
 	return &t
 }
 
-func (*FileInfoExtractor) readdir(dirname string) []string {
+func (*FileInfoExtractor) readdir(dirname string) (list []string, err error) {
 	file, err := os.Open(dirname)
 	if err != nil {
-		log.Fatalf("failed opening directory: %s", err)
+		return nil, err
 	}
 	defer file.Close()
-	list, _ := file.Readdirnames(0) // 0 to read all files and folders
-	return list
+	list, err = file.Readdirnames(0) // 0 to read all files and folders
+	return
 }

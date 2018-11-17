@@ -1,0 +1,12 @@
+downloadDirectory: "downloads"
+minSetLengthInSeconds: 1800
+
+podcasts:
+  - channelName: "Q-Dance"
+    channelURL: "https://www.youtube.com/user/Qdancedotnl"
+    channelImageURL: "https://yt3.ggpht.com/a-/AN66SAzyW12uAQRayPY4MS_Fo_Wlj6PFjyNfx3X7CQ=s288-mo-c-c0xffffffff-rj-k-no"
+    playlistToDownloadURL: "https://www.youtube.com/user/Qdancedotnl/videos"
+  - channelName: "B2S"
+    channelURL: "https://www.youtube.com/user/officialb2s"
+    channelImageURL: "https://yt3.ggpht.com/a-/AN66SAzOHiotaZ20EWS6f9SHfzDPHQeAR_gyn-ng9w=s288-mo-c-c0xffffffff-rj-k-no"
+    playlistToDownloadURL: "https://www.youtube.com/user/officialb2s/videos"

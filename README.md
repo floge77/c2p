@@ -1,16 +1,30 @@
-# Cloud2Podcast
-A Go-Tool for creating a Podcast readable XML/RSS Feed from Mixcloud / Soundcloud
+# cloud2podcast
+A Go-Tool for creating a Podcast readable XML/RSS Feed from Youtube/Mixcloud/Soundcloud.
 
 ## Purpose
-I personally listen a lot to Mixcloud and Soundcloud sets by any artists. 
+I personally listen a lot to Youtube, Mixcloud and Soundcloud sets by any artists. 
 
-Living in Germany means having the worst mobile data contracts of all developed countries. So streaming of Mixcloud / Soundcloud is really not an option to enjoy your favorite music.
+Living in Germany means having the worst mobile data contracts of all developed countries. So streaming of Youtube/Mixcloud/Soundcloud is really not an option to enjoy your favorite music.
 I could waste my time every day using one out of many X-cloud downloaders to save my favorite sets and sync them with my mobile phone - that SUCKS!
 
-For me the perfect solution would be to download my favorite sets like my podcasts gets downloaded - without any action from my side.
-To do so we want to build this little tool which reads your favorite artists from and creates out of that information a XML/RSS Feed which any Podcast Application can read and download.
+For me the perfect solution would be to download my favorite sets like my podcasts get downloaded - without any action from my side.
+To do so I built this little tool which reads your favorite artists from a yaml file and creates out of that information a XML/RSS Feed which any podcast application can read and download.
 
-## Examples
+## Installation
+* Ensure you've installed [docker](https://docs.docker.com/install/) 
+* `git clone https://github.com/floge77/cloud2podcast`
+* `cd cloud2podcast && ./build.sh`
+* `./runContainer.sh <yourLocalDownloaddirectory>`
+* Check if the application is running at http://localhost:8080 
+
+## Current Status
+At the moment cloud2podcast works for youtube channels. This is possible with the usage of the awesome [youtube-dl project](https://github.com/rg3/youtube-dl/).
+The configured channel will be downloaded and the information of the files will be transformed to a podcast-feed.
+
+The next big goal is get Mixcloud to work!  
+
+
+## Mixcloud Examples - Help needed
 
 ### Example 1
 Artist: "q-dance" Track: "q-dance-presents-hardstyle-top-40-l-october-2018" :

@@ -15,11 +15,18 @@ func NewYamlreader() *YamlReader {
 	return &YamlReader{}
 }
 
+func GetConfig(yamlPath string) PodcastConfig {
+	yamlReader := NewYamlreader()
+	config := PodcastConfig{}
+	config = yamlReader.ReadYamlfile(yamlPath, config)
+	return config
+}
+
 func (*YamlReader) ReadYamlfile(filePath string, config PodcastConfig) PodcastConfig {
 
 	yamlFile, err := ioutil.ReadFile(filePath)
 	if err != nil {
-		log.Fatalf("error: %v", err)
+		log.Fatalf("Could not open %v Error: %v", filePath, err)
 	}
 
 	err = yaml.Unmarshal(yamlFile, &config)

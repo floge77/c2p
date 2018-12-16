@@ -1,7 +1,7 @@
 package podcastMaker
 
 import (
-	"cloud2podcast/musiccloud"
+	"github.com/floge77/c2p/cloud2podcast/musiccloud"
 	"os"
 	"strings"
 	"time"

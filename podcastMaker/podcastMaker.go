@@ -1,8 +1,9 @@
 package podcastMaker
 
 import (
-	"cloud2podcast/musiccloud"
+
 	"fmt"
+	"github.com/floge77/c2p/cloud2podcast/musiccloud"
 
 	"github.com/eduncan911/podcast"
 )

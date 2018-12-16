@@ -1,0 +1,3 @@
+write tests for fileInfoExtractor
+make webinterface for Caro
+build a cleanUp bot (all files older than X month)

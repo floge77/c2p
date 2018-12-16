@@ -1,4 +1,4 @@
 #!/bin/bash
 
 echo "_____->Building Cloud2Podcast Application<-_____"
-docker build -t cloud2podcast .
+docker build -t cloud2podcast ../

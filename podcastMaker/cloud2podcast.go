@@ -1,8 +1,7 @@
 package podcastMaker
 
 import (
-	"cloud2podcast/configReader"
-	"cloud2podcast/musiccloud"
+	"github.com/floge77/c2p/cloud2podcast/musiccloud"
 	"log"
 	"net/http"
 )
@@ -12,18 +11,18 @@ type Cloud2podcast struct {
 	fileInfoExtractor *FileInfoExtractor
 }
 
+func NewCloud2podcast() *Cloud2podcast {
+	c2p := &Cloud2podcast{}
+	c2p.podcastMaker = NewPodcastMaker()
+	c2p.fileInfoExtractor = NewFileInfoExtractor()
+	return c2p
+}
+
 //func Handle() http.Handler {
 //	return http.HandlerFunc(MakeAllPodcasts)
 //}
 
-func GetConfig(yamlPath string) configReader.PodcastConfig {
-	yamlReader := configReader.NewYamlreader()
-	config := configReader.PodcastConfig{}
-	config = yamlReader.ReadYamlfile(yamlPath, config)
-	return config
-}
-
-func (c *Cloud2podcast) MakeAllPodcasts(w http.ResponseWriter, r *http.Request) {
+/*func (c *Cloud2podcast) MakeAllPodcasts(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 
 	c.podcastMaker = NewPodcastMaker()
@@ -37,11 +36,11 @@ func (c *Cloud2podcast) MakeAllPodcasts(w http.ResponseWriter, r *http.Request) 
 			podcast.ChannelURL,
 			podcast.ChannelImageURL,
 			podcast.PlaylistToDownloadURL)
-		go c.servePodcast(w, r, podcastInfo, config.DownloadDirectory)
+		go c.servePodcast(w, r,podcastInfo, config.DownloadDirectory)
 	}
-}
+}*/
 
-func (c *Cloud2podcast) servePodcast(w http.ResponseWriter, r *http.Request, podcastInfo *musiccloud.Podcastinfo, generalDownloadDirectory string) {
+func (c *Cloud2podcast) ServePodcast(w http.ResponseWriter, r *http.Request, podcastInfo *musiccloud.Podcastinfo, generalDownloadDirectory string) {
 	completeDownloadDirectory := generalDownloadDirectory + "/" + podcastInfo.Provider + "/" + podcastInfo.Channel
 	var err error
 

@@ -1,0 +1,4 @@
+hosts:
+  cloud2podcast:
+    ansible_host: 192.168.178.33
+    ansible_user: pi

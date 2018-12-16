@@ -1,9 +1,9 @@
 FROM golang:alpine as builder
-
+RUN apk update && apk add git
 RUN adduser -D -g '' cloud2podcast
 
-COPY . $GOPATH/src/cloud2podcast
-WORKDIR $GOPATH/src/cloud2podcast
+COPY . $GOPATH/src/c2p
+WORKDIR $GOPATH/src/c2p
 
 RUN go get -d -v
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -ldflags='-w -s'  -o /go/bin/cloud2podcast

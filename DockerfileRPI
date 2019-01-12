@@ -6,7 +6,7 @@ COPY . $GOPATH/src/github.com/floge77/c2p/cloud2podcast
 WORKDIR $GOPATH/src/github.com/floge77/c2p/cloud2podcast
 
 RUN go get -d -v
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -ldflags='-w -s'  -o /go/bin/cloud2podcast
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=7 go build -a -installsuffix cgo -ldflags='-w -s'  -o /go/bin/cloud2podcast
 
 # Build small sratch image
 FROM scratch

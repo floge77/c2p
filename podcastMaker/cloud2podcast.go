@@ -18,47 +18,29 @@ func NewCloud2podcast() *Cloud2podcast {
 	return c2p
 }
 
-//func Handle() http.Handler {
-//	return http.HandlerFunc(MakeAllPodcasts)
-//}
+func (c *Cloud2podcast) ServePodcast(podcastInfo *musiccloud.Podcastinfo, generalDownloadDirectory string) func(http.ResponseWriter, *http.Request)  {
+	return func(w http.ResponseWriter, r *http.Request) {
+		completeDownloadDirectory := generalDownloadDirectory + "/" + podcastInfo.Provider + "/" + podcastInfo.Channel
+		var err error
 
-/*func (c *Cloud2podcast) MakeAllPodcasts(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
+		podcastInfo.Items, err = c.fileInfoExtractor.GetPodcastItemsInformationForDir(completeDownloadDirectory)
+		if err != nil {
+			log.Printf("Could not serve Podcast: %v Error: %v", podcastInfo.Channel, err)
+		} else {
+			podcast := c.podcastMaker.GetInitializedPodcast(podcastInfo)
 
-	c.podcastMaker = NewPodcastMaker()
-	c.fileInfoExtractor = NewFileInfoExtractor()
+			for _, item := range podcastInfo.Items {
+				//c.podcastMaker.AppendPodcastItem(podcast, item, "http://cloud2podcast:8080"+completeDownloadDirectory+"/")
+				c.podcastMaker.AppendPodcastItem(podcast, item, "http://192.168.178.36:8080"+completeDownloadDirectory+"/")
+			}
 
-	config := GetConfig("config/config.yaml")
+			w.Header().Set("Content-Type", "application/xml")
 
-	for _, podcast := range config.PodcastsToServe {
-		podcastInfo := musiccloud.NewPodcastinfo(
-			podcast.Channel,
-			podcast.ChannelURL,
-			podcast.ChannelImageURL,
-			podcast.PlaylistToDownloadURL)
-		go c.servePodcast(w, r,podcastInfo, config.DownloadDirectory)
-	}
-}*/
-
-func (c *Cloud2podcast) ServePodcast(w http.ResponseWriter, r *http.Request, podcastInfo *musiccloud.Podcastinfo, generalDownloadDirectory string) {
-	completeDownloadDirectory := generalDownloadDirectory + "/" + podcastInfo.Provider + "/" + podcastInfo.Channel
-	var err error
-
-	podcastInfo.Items, err = c.fileInfoExtractor.GetPodcastItemsInformationForDir(completeDownloadDirectory)
-	if err != nil {
-		log.Printf("Could not serve Podcast: %v Error: %v", podcastInfo.Channel, err)
-	} else {
-		podcast := c.podcastMaker.GetInitializedPodcast(podcastInfo)
-
-		for _, item := range podcastInfo.Items {
-			c.podcastMaker.AppendPodcastItem(podcast, item, "http://192.168.178.30:8080/"+completeDownloadDirectory+"/")
-		}
-
-		w.Header().Set("Content-Type", "application/xml")
-
-		if err := podcast.Encode(w); err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			if err := podcast.Encode(w); err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+			}
 		}
 	}
+
 
 }

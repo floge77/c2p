@@ -1,6 +1,7 @@
 package podcastMaker
 
 import (
+	"fmt"
 	"github.com/floge77/c2p/cloud2podcast/musiccloud"
 	"os"
 	"strings"
@@ -21,9 +22,12 @@ func (f *FileInfoExtractor) GetPodcastItemsInformationForDir(dir string) (itemIn
 		return nil, err
 	}
 	for _, name := range fileNames {
+		fmt.Println(fileNames)
 		// create Info structs for podcastsItems
-		item := f.getPodcastItemInfosFromFileName(dir, name)
-		itemInfos = append(itemInfos, item)
+		if strings.Contains(name, ".mp3") {
+			item := f.getPodcastItemInfosFromFileName(dir, name)
+			itemInfos = append(itemInfos, item)
+		}
 	}
 	return
 }
@@ -33,9 +37,9 @@ func (f *FileInfoExtractor) getPodcastItemInfosFromFileName(dir string, filename
 	s := strings.Replace(filename, ".mp3", "", -1)
 	fields := strings.Split(s, "__")
 	item = &musiccloud.PodcastItem{}
-	item.Title = fields[1]
-	item.Channel = fields[2]
-	item.ReleaseDate = f.getReleaseDateFromString(fields[0])
+	item.Title = fields[0]
+	item.Channel = fields[1]
+	item.ReleaseDate = f.getReleaseDateFromString(fields[2])
 	fileSize, _ := f.extractFileSize(dir, filename)
 	item.FileSize = fileSize
 	item.FileName = filename

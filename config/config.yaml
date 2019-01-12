@@ -1,4 +1,5 @@
-downloadDirectory: "/downloads"
+#downloadDirectory: "/downloads"
+downloadDirectory: "/Users/d068994/Downloads"
 minSetLengthInSeconds: 1800
 
 podcasts:

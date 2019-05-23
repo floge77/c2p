@@ -22,15 +22,16 @@ Example file tree:
 ```
 downloads
 └── youtube
-    └── Q-dance
-        └──file.mp3
+|    └── Q-dance
+|       └──file.mp3
+└── config.yaml
 ```
 
 ## Installation
 * Ensure you've installed [docker](https://docs.docker.com/install/) 
 * `git clone https://github.com/floge77/cloud2podcast`
 * `cd cloud2podcast && buildCloud2podcast.sh`
-* `./runContainer.sh <yourLocalDownloaddirectory>` (in my emxample it is the absolute path to `downloads`)
+* Execute `./runContainer.sh` which starts the contauner with the downloads directory from your current path (pwd) mounted. The directory structure mentioned above is required.
 * Check if the application is running at `http://localhost:8080/<your configured Podcast channel>` (in my example `http://localhost:8080/Q-Dance`)
 
 

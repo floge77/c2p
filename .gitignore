@@ -1,5 +1,4 @@
-downloads/
+downloads/*/*
 .vscode/
 .idea/
-config/archive.txt
-config/youtube-dl.conf
+config/

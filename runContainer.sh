@@ -3,12 +3,11 @@ set -o nounset
 set -o errexit
 
 if [[ "$#" -ne 1 ]]; then
-    echo "Usage: $(basename "$0") downloadDirectory"
-    echo "Docker Container with name cloud2podcast will be started with the downloadDirectory for your podcasts mounted"
+    echo -n "Docker Container with name cloud2podcast will be started with the `pwd`/downloads mounted"
+    echo -n "If the reuired is not clear to you please visit https://github.com/floge77/cloud2podcast#download-tracks"
     exit 1
 fi
 
 echo "_____->Running cloud2podcast<-_____"
-downloadDir=$1
 
-docker run --rm --name cloud2podcast -p 8080:8080 -v $downloadDir:/downloads -it cloud2podcast
+docker run --rm --name cloud2podcast -p 8080:8080 -v `pwd`/downloads:/downloads -it cloud2podcast

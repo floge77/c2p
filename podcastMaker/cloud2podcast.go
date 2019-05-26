@@ -4,6 +4,7 @@ import (
 	"github.com/floge77/cloud2podcast/musiccloud"
 	"log"
 	"net/http"
+	"os"
 )
 
 type Cloud2podcast struct {
@@ -18,7 +19,7 @@ func NewCloud2podcast() *Cloud2podcast {
 	return c2p
 }
 
-func (c *Cloud2podcast) ServePodcast(podcastInfo *musiccloud.Podcastinfo, generalDownloadDirectory string) func(http.ResponseWriter, *http.Request)  {
+func (c *Cloud2podcast) ServePodcast(podcastInfo *musiccloud.Podcastinfo, generalDownloadDirectory string) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		completeDownloadDirectory := generalDownloadDirectory + "/" + podcastInfo.Provider + "/" + podcastInfo.Channel
 		var err error
@@ -29,8 +30,10 @@ func (c *Cloud2podcast) ServePodcast(podcastInfo *musiccloud.Podcastinfo, genera
 		} else {
 			podcast := c.podcastMaker.GetInitializedPodcast(podcastInfo)
 
+			hostIP  := os.Getenv("HOST_IP")
+			
 			for _, item := range podcastInfo.Items {
-				c.podcastMaker.AppendPodcastItem(podcast, item, "http://localhost:8080"+completeDownloadDirectory+"/")
+				c.podcastMaker.AppendPodcastItem(podcast, item, "http://" + hostIP + ":8080" + completeDownloadDirectory + "/")
 				//c.podcastMaker.AppendPodcastItem(podcast, item, "http://192.168.178.36:8080"+completeDownloadDirectory+"/")
 			}
 
@@ -41,6 +44,4 @@ func (c *Cloud2podcast) ServePodcast(podcastInfo *musiccloud.Podcastinfo, genera
 			}
 		}
 	}
-
-
 }

@@ -13,7 +13,7 @@ To do so I built this little tool which reads your favorite artists from a yaml 
 ## Download Tracks
 Use youtube-dl to download tracks. 
 I use my raspberry-pi as a podcastprovider and download the channels with the following command:
-`youtube-dl --verbose -x -i --dateafter now-12months --audio-format "mp3" --embed-thumbnail --add-metadata --match-filter "duration>1800" --download-archive ./archive.txt -o "./%(title)s__%(uploader)s__%(upload_date)s.%(ext)s" https://www.youtube.com/user/Qdancedotnl/videos`
+`youtube-dl --verbose -x -i --dateafter now-12months --audio-format "mp3" --embed-thumbnail --add-metadata --match-filter "duration>1800" --download-archive ./youtube/Q-Dance/archive.txt -o "./youtube/Q-Dance/%(title)s__%(uploader)s__%(upload_date)s.%(ext)s" https://www.youtube.com/user/Qdancedotnl/videos`
 Be aware of the output format. Cloud2Podcast expects exactly this outputformat to work.
 In the config.yaml which has to be placed in your download directory you have to configure the podcast (see the config.yaml as an example). 
 The `channelName` in the config.yaml has to be the directory name in the downloads/youtube directory.
@@ -31,7 +31,7 @@ downloads
 * Ensure you've installed [docker](https://docs.docker.com/install/) 
 * `git clone https://github.com/floge77/cloud2podcast`
 * `cd cloud2podcast && buildCloud2podcast.sh`
-* Execute `./runContainer.sh` which starts the contauner with the downloads directory from your current path (pwd) mounted. The directory structure mentioned above is required.
+* Execute `./runContainer.sh` which starts the container with the downloads directory from your current path (pwd) mounted. The directory structure mentioned above is required.
 * Check if the application is running at `http://localhost:8080/<your configured Podcast channel>` (in my example `http://localhost:8080/Q-Dance`)
 
 
